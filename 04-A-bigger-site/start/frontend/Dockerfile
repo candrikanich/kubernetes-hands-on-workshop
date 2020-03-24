@@ -1,7 +1,7 @@
-FROM node:alpine
+# FROM node:alpine
 
-ENV NODE_ENV production
-ENV PORT 3000
+# ENV NODE_ENV production
+# ENV PORT 3000
 
 
 # TODO: add the Docker commands to do these steps:
@@ -15,3 +15,22 @@ ENV PORT 3000
 
 # as the container starts:
 # `npm start`
+
+FROM node:alpine
+
+RUN apt-get update && apt-get install -y curl
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get update && apt-get install -y nodejs
+
+WORKDIR /app
+
+COPY package.json /app
+RUN npm install
+
+COPY . /app
+
+ENV NODE_ENV production
+ENV PORT 3000
+EXPOSE 3000
+
+CMD ["npm", "start"]
